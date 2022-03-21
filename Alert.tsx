@@ -80,26 +80,23 @@ export function AlertProvider({ children }: React.PropsWithChildren<{}>) {
       data: AlertData;
     }[]
   >([]);
-  const alertDataDispatch = React.useCallback(
-    (newAlertData: AlertData) => {
-      let isDelete = false;
-      const close = () => {
-        if (isDelete) return;
-        isDelete = true;
-        setAlertDatas((originAlertDatas) =>
-          originAlertDatas.filter(
-            (originAlertData) => originAlertData.data !== newAlertData
-          )
-        );
-      };
-      setAlertDatas((originAlertDatas) => [
-        ...originAlertDatas,
-        { close, data: newAlertData },
-      ]);
-      return close;
-    },
-    [setAlertDatas]
-  );
+  const alertDataDispatch = React.useCallback((newAlertData: AlertData) => {
+    let isDelete = false;
+    const close = () => {
+      if (isDelete) return;
+      isDelete = true;
+      setAlertDatas((originAlertDatas) =>
+        originAlertDatas.filter(
+          (originAlertData) => originAlertData.data !== newAlertData
+        )
+      );
+    };
+    setAlertDatas((originAlertDatas) => [
+      ...originAlertDatas,
+      { close, data: newAlertData },
+    ]);
+    return close;
+  }, []);
   const currentAlertData = alertDatas[alertDatas.length - 1];
   return (
     <AlertContext.Provider value={alertDataDispatch}>
