@@ -27,36 +27,39 @@ const defualtAlertActions: AlertData["actions"] = {
 // ANCHOR hook
 export function useAlert() {
   const alertDataDispatch = React.useContext(AlertContext);
-  return function alert(
-    ...parms:
-      | [Required<AlertData>["content"]]
-      | [Required<AlertData>["title"], Required<AlertData>["content"]]
-      | [
-          Required<AlertData>["title"],
-          Required<AlertData>["content"],
-          Required<AlertData>["actions"]
-        ]
-  ): CloseHandler {
-    if (parms.length === 1) {
-      return alertDataDispatch({
-        title: "通知",
-        content: parms[0],
-        actions: defualtAlertActions,
-      });
-    } else if (parms.length === 2) {
-      return alertDataDispatch({
-        title: parms[0],
-        content: parms[1],
-        actions: defualtAlertActions,
-      });
-    } else {
-      return alertDataDispatch({
-        title: parms[0],
-        content: parms[1],
-        actions: parms[2],
-      });
-    }
-  } as {
+  return React.useCallback(
+    function alert(
+      ...parms:
+        | [Required<AlertData>["content"]]
+        | [Required<AlertData>["title"], Required<AlertData>["content"]]
+        | [
+            Required<AlertData>["title"],
+            Required<AlertData>["content"],
+            Required<AlertData>["actions"]
+          ]
+    ): CloseHandler {
+      if (parms.length === 1) {
+        return alertDataDispatch({
+          title: "通知",
+          content: parms[0],
+          actions: defualtAlertActions,
+        });
+      } else if (parms.length === 2) {
+        return alertDataDispatch({
+          title: parms[0],
+          content: parms[1],
+          actions: defualtAlertActions,
+        });
+      } else {
+        return alertDataDispatch({
+          title: parms[0],
+          content: parms[1],
+          actions: parms[2],
+        });
+      }
+    },
+    [alertDataDispatch]
+  ) as {
     (content: Required<AlertData>["content"]): (
       newAlertData: AlertData
     ) => CloseHandler;
